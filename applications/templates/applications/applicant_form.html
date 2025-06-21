@@ -1,0 +1,683 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Edit{% else %}Create{% endif %} Application{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if object %}Edit{% else %}Create{% endif %} Application</h2>
+    
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Error!</strong> Please correct the errors below.
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field|title }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data" id="applicationForm">
+        {% csrf_token %}
+        
+        <!-- Personal Information Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Personal Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                            {{ form.title }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.previous_permit.id_for_label }}" class="form-label">Previous permit</label>
+                            {{ form.previous_permit }}
+                        </div>
+                    </div>
+                </div>
+                <!-- In the Personal Information section, after the previous_permit_number field -->
+                <div class="row" id="permitTypeSection" style="display: none;">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="{{ form.applying_for.id_for_label }}" class="form-label">Applying for</label>
+                            {{ form.applying_for }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="previousPermitSection" style="display: none;">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="{{ form.previous_permit_number.id_for_label }}" class="form-label">Previous permit number</label>
+                            {{ form.previous_permit_number }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.surname.id_for_label }}" class="form-label">Surname</label>
+                            {{ form.surname }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.first_names.id_for_label }}" class="form-label">First Names</label>
+                            {{ form.first_names }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date Of Birth</label>
+                            {{ form.date_of_birth }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.country_of_birth.id_for_label }}" class="form-label">Country Of Birth</label>
+                            {{ form.country_of_birth }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.city_of_birth.id_for_label }}" class="form-label">City Of Birth</label>
+                            {{ form.city_of_birth }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.nationality.id_for_label }}" class="form-label">Nationality</label>
+                            {{ form.nationality }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.present_nationality.id_for_label }}" class="form-label">Present Nationality</label>
+                            {{ form.present_nationality }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.marital_status.id_for_label }}" class="form-label">Marital Status</label>
+                            {{ form.marital_status }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" id="marriageInfoSection" style="display: none;">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.marriage_date.id_for_label }}" class="form-label">Marriage Date</label>
+                            {{ form.marriage_date }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.married_to_sa_citizen.id_for_label }}" class="form-label">Married To SA Citizen?</label>
+                            {{ form.married_to_sa_citizen }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.passport_number.id_for_label }}" class="form-label">Passport number</label>
+                            {{ form.passport_number }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.passport_issue_date.id_for_label }}" class="form-label">Passport issue date</label>
+                            {{ form.passport_issue_date }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.passport_expiry_date.id_for_label }}" class="form-label">Passport expiry date</label>
+                            {{ form.passport_expiry_date }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="{{ form.passport_issued_by.id_for_label }}" class="form-label">Passport issued by</label>
+                            {{ form.passport_issued_by }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Information Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Contact Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.house_number_and_street.id_for_label }}" class="form-label">House Number And Street</label>
+                            {{ form.house_number_and_street }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.suburb.id_for_label }}" class="form-label">Suburb</label>
+                            {{ form.suburb }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.town_or_city.id_for_label }}" class="form-label">Town Or City</label>
+                            {{ form.town_or_city }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.postal_code.id_for_label }}" class="form-label">Postal Code</label>
+                            {{ form.postal_code }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ form.cell_phone_number.id_for_label }}" class="form-label">Cell Phone Number</label>
+                            {{ form.cell_phone_number }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.work_phone_number.id_for_label }}" class="form-label">Work Phone Number</label>
+                            {{ form.work_phone_number }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.whatsapp_number.id_for_label }}" class="form-label">WhatsApp Number</label>
+                            {{ form.whatsapp_number }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Employment Information Section -->
+        
+        {% if object or form.errors %}
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Employment Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3 form-check">
+                            {{ form.employed }}
+                            <label class="form-check-label" for="{{ form.employed.id_for_label }}">Currently Employed</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="employmentDetailsSection">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.employer_name.id_for_label }}" class="form-label">Employer Name</label>
+                                {{ form.employer_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.industry.id_for_label }}" class="form-label">Industry</label>
+                                {{ form.industry }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.job_profile.id_for_label }}" class="form-label">Job profile</label>
+                                {{ form.job_profile }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.business_type.id_for_label }}" class="form-label">Business Type</label>
+                                {{ form.business_type }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.employer_street_address.id_for_label }}" class="form-label">Employer Street Address</label>
+                                {{ form.employer_street_address }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.employer_town.id_for_label }}" class="form-label">Employer Town/City</label>
+                                {{ form.employer_town }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.employer_post_code.id_for_label }}" class="form-label">Employer Postal Code</label>
+                                {{ form.employer_post_code }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.years_worked.id_for_label }}" class="form-label">Years Worked</label>
+                                {{ form.years_worked }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.commencement_date.id_for_label }}" class="form-label">Commencement Date</label>
+                                {{ form.commencement_date }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.manager_name.id_for_label }}" class="form-label">Manager Name</label>
+                                {{ form.manager_name }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.reference.id_for_label }}" class="form-label">Reference</label>
+                                {{ form.reference }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.previous_employer.id_for_label }}" class="form-label">Previous Employer</label>
+                                {{ form.previous_employer }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Education Information Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Education Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.school.id_for_label }}" class="form-label">School</label>
+                            {{ form.school }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label">High School Subjects</label>
+                            <div class="row">
+                                {% for subject in form.subjects.field.choices %}
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="subjects" 
+                                                   id="subject_{{ forloop.counter }}" value="{{ subject.0 }}"
+                                                   {% if subject.0 in form.subjects.value %}checked{% endif %}>
+                                            <label class="form-check-label" for="subject_{{ forloop.counter }}">
+                                                {{ subject.1 }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h3>Immigration Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="{{ form.asylum_refugee_status.id_for_label }}" class="form-label">Asylum/Refugee Status</label>
+                    {{ form.asylum_refugee_status }}
+                </div>
+            </div>
+        </div>
+        
+        <div id="refugeeInfoSection" style="display: none;">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{ form.refugee_reference_number.id_for_label }}" class="form-label">Refugee reference number</label>
+                        {{ form.refugee_reference_number }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="{{ form.refugee_country.id_for_label }}" class="form-label">Refugee country</label>
+                        {{ form.refugee_country }}
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.date_of_entry_sa.id_for_label }}" class="form-label">Date Of Entry To South Africa</label>
+                            {{ form.date_of_entry_sa }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.place_of_entry_sa.id_for_label }}" class="form-label">Place Of Entry To South Africa</label>
+                            {{ form.place_of_entry_sa }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Application Stage Information Section - Only shown in edit mode for staff -->
+      {% if object and request.user.is_staff %}
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h3>Application Stage Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="deposit_slip_toggle" 
+                           {% if form.deposit_slip_sent.value %}checked{% endif %}>
+                    <label class="form-check-label" for="deposit_slip_toggle">Deposit Slip Sent</label>
+                    {{ form.deposit_slip_sent.as_hidden }}
+                    <div id="deposit_slip_date" class="text-muted small mt-1" 
+                         {% if not form.deposit_slip_sent.value %}style="display: none;"{% endif %}>
+                        {{ form.deposit_slip_sent.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="deposited_bank_toggle" 
+                           {% if form.deposited_at_standard_bank.value %}checked{% endif %}>
+                    <label class="form-check-label" for="deposited_bank_toggle">Deposited At Bank</label>
+                    {{ form.deposited_at_standard_bank.as_hidden }}
+                    <div id="deposited_bank_date" class="text-muted small mt-1" 
+                         {% if not form.deposited_at_standard_bank.value %}style="display: none;"{% endif %}>
+                        {{ form.deposited_at_standard_bank.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="payment_reflected_toggle" 
+                           {% if form.payment_reflected.value %}checked{% endif %}>
+                    <label class="form-check-label" for="payment_reflected_toggle">Payment Reflected</label>
+                    {{ form.payment_reflected.as_hidden }}
+                    <div id="payment_reflected_date" class="text-muted small mt-1" 
+                         {% if not form.payment_reflected.value %}style="display: none;"{% endif %}>
+                        {{ form.payment_reflected.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="appointment_booked_toggle" 
+                           {% if form.appointment_booked.value %}checked{% endif %}>
+                    <label class="form-check-label" for="appointment_booked_toggle">Appointment Booked</label>
+                    {{ form.appointment_booked.as_hidden }}
+                    <div id="appointment_booked_date" class="text-muted small mt-1" 
+                         {% if not form.appointment_booked.value %}style="display: none;"{% endif %}>
+                        {{ form.appointment_booked.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3" id="appointment_date_field" 
+                     {% if not form.appointment_booked.value %}style="display: none;"{% endif %}>
+                    <label for="{{ form.appointment_date.id_for_label }}" class="form-label">Appointment Date</label>
+                    {{ form.appointment_date }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="documents_sent_toggle" 
+                           {% if form.documents_sent.value %}checked{% endif %}>
+                    <label class="form-check-label" for="documents_sent_toggle">Documents Sent</label>
+                    {{ form.documents_sent.as_hidden }}
+                    <div id="documents_sent_date" class="text-muted small mt-1" 
+                         {% if not form.documents_sent.value %}style="display: none;"{% endif %}>
+                        {{ form.documents_sent.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+                <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="submitted_toggle" 
+                        {% if form.submitted.value %}checked{% endif %}>
+                    <label class="form-check-label" for="submitted_toggle">Submitted</label>
+                    {{ form.submitted.as_hidden }}
+                    <div id="submitted_date" class="text-muted small mt-1" 
+                        {% if not form.submitted.value %}style="display: none;"{% endif %}>
+                        {{ form.submitted.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="{{ form.agent_fee_paid.id_for_label }}" class="form-label">Agent Fee Paid</label>
+                    {{ form.agent_fee_paid }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="agent_fee_paid_date_toggle" 
+                           {% if form.agent_fee_paid_date.value %}checked{% endif %}>
+                    <label class="form-check-label" for="agent_fee_paid_date_toggle">Agent Fee Paid Date</label>
+                    {{ form.agent_fee_paid_date.as_hidden }}
+                    <div id="agent_fee_paid_date_display" class="text-muted small mt-1" 
+                         {% if not form.agent_fee_paid_date.value %}style="display: none;"{% endif %}>
+                        {{ form.agent_fee_paid_date.value|default:"" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label for="{{ form.visa_status.id_for_label }}" class="form-label">Visa Status</label>
+                    {{ form.visa_status }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle toggle switches
+    function setupToggle(toggleId, hiddenFieldId, dateDisplayId) {
+        const toggle = document.getElementById(toggleId);
+        const hiddenField = document.getElementById(hiddenFieldId);
+        const dateDisplay = document.getElementById(dateDisplayId);
+        
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                // Set current date when toggled on
+                const today = new Date().toISOString().split('T')[0];
+                hiddenField.value = today;
+                dateDisplay.textContent = today;
+                dateDisplay.style.display = 'block';
+                
+                // Special handling for appointment booked toggle
+                if (toggleId === 'appointment_booked_toggle') {
+                    document.getElementById('appointment_date_field').style.display = 'block';
+                }
+            } else {
+                // Clear date when toggled off
+                hiddenField.value = '';
+                dateDisplay.style.display = 'none';
+                
+                // Special handling for appointment booked toggle
+                if (toggleId === 'appointment_booked_toggle') {
+                    document.getElementById('appointment_date_field').style.display = 'none';
+                    document.getElementById('id_appointment_date').value = '';
+                }
+            }
+        });
+    }
+
+    // Set up all toggle switches
+    setupToggle('deposit_slip_toggle', 'id_deposit_slip_sent', 'deposit_slip_date');
+    setupToggle('deposited_bank_toggle', 'id_deposited_at_standard_bank', 'deposited_bank_date');
+    setupToggle('payment_reflected_toggle', 'id_payment_reflected', 'payment_reflected_date');
+    setupToggle('appointment_booked_toggle', 'id_appointment_booked', 'appointment_booked_date');
+    setupToggle('documents_sent_toggle', 'id_documents_sent', 'documents_sent_date');
+    setupToggle('submitted_toggle', 'id_submitted', 'submitted_date');
+    setupToggle('agent_fee_paid_date_toggle', 'id_agent_fee_paid_date', 'agent_fee_paid_date_display');
+    
+    // Initialize appointment date field visibility
+    if (document.getElementById('appointment_booked_toggle').checked) {
+        document.getElementById('appointment_date_field').style.display = 'block';
+    }
+});
+</script>
+{% else %}
+<!-- Hidden fields for employment data -->
+{{ form.employed.as_hidden }}
+{{ form.business_type.as_hidden }}
+{% endif %}
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <button type="submit" class="btn btn-primary me-md-2">{% if object %}Update{% else %}Submit{% endif %} Application</button>
+            <a href="{% if object %}{% url 'applicant_detail' object.pk %}{% else %}{% url 'applicant_list' %}{% endif %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+  
+    const refugeeStatusField = document.getElementById('id_asylum_refugee_status');
+    const refugeeSection = document.getElementById('refugeeInfoSection');
+    
+    function toggleRefugeeFields() {
+        if (refugeeStatusField.value === 'Yes') {
+            refugeeSection.style.display = 'block';
+        } else {
+            refugeeSection.style.display = 'none';
+            // Clear fields when hiding
+            document.getElementById('id_refugee_reference_number').value = '';
+            document.getElementById('id_refugee_country').value = '';
+        }
+    }
+    
+    // Initialize
+    toggleRefugeeFields();
+    
+    // Add event listener
+    refugeeStatusField.addEventListener('change', toggleRefugeeFields);
+    
+    // Handle form submission
+    const form = document.getElementById('applicationForm');
+    form.addEventListener('submit', function() {
+        if (refugeeStatusField.value === 'No') {
+            // Ensure fields are empty before submission
+            document.getElementById('id_refugee_reference_number').value = '';
+            document.getElementById('id_refugee_country').value = '';
+        }
+    });
+   
+    
+   // In the existing JavaScript section of the form template
+const previousPermitField = document.getElementById('id_previous_permit');
+const previousPermitSection = document.getElementById('previousPermitSection');
+const permitTypeSection = document.getElementById('permitTypeSection');
+
+function togglePermitFields() {
+    if (previousPermitField.value === 'Yes') {
+        previousPermitSection.style.display = 'block';
+        permitTypeSection.style.display = 'block';
+    } else {
+        previousPermitSection.style.display = 'none';
+        permitTypeSection.style.display = 'none';
+        // Clear fields when hiding
+        document.getElementById('id_previous_permit_number').value = '';
+        document.getElementById('id_applying_for').value = 'none';
+    }
+}
+
+// Initialize
+togglePermitFields();
+
+// Add event listener
+previousPermitField.addEventListener('change', togglePermitFields);
+    
+});
+</script>
+{% endblock %}

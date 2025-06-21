@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block title %}Applications List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Applications</h2>
+        {% if user.is_staff %}
+        <a href="{% url 'jobprofile_list' %}" class="btn btn-info btn-sm">
+            <i class="bi bi-briefcase me-1"></i>Manage Job Profiles
+        </a>
+        {% endif %}
+    </div>
+    
+    <!-- Upcoming Appointments Section -->
+    {% if user.is_staff and upcoming_appointments %}
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-calendar-check me-2"></i>Upcoming Appointments
+                <span class="badge bg-white text-primary float-end">{{ upcoming_appointments|length }}</span>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="d-none d-md-table-header-group">
+                        <tr>
+                            <th>Name</th>
+                            <th>Agent Fee Status</th>
+                            <th>Appointment Date</th>
+                            <th>Time Until</th>
+                            <th>Documents Ready</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for applicant in upcoming_appointments %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'applicant_detail' applicant.pk %}">
+                                    <span class="d-md-none"><strong>{{ applicant.surname }}</strong></span>
+                                    <span class="d-none d-md-inline">{{ applicant.surname }}, {{ applicant.first_names }}</span>
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {% if applicant.agent_fee_paid %}
+                                    <span class="badge bg-success">Paid</span>
+                                    <small>R{{ applicant.agent_fee_paid|floatformat:2 }}</small>
+                                    {% if applicant.agent_fee_paid_date %}
+                                        <small class="text-muted">({{ applicant.agent_fee_paid_date|date:"M d Y" }})</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <strong>{{ applicant.appointment_date|date:"D, M j, Y" }}</strong>
+                                <span class="d-none d-md-inline">
+                                    {% if applicant.appointment_date.time %}
+                                        <br><small>{{ applicant.appointment_date|time:"H:i" }}</small>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {% with days_until=applicant.appointment_date|timeuntil %}
+                                    {% if "day" in days_until %}
+                                        <span class="badge {% if applicant.appointment_date|timeuntil == '0 minutes' %}bg-success{% elif applicant.appointment_date|timeuntil|slice:":2"|add:"0" <= 2 %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ days_until }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Today</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {% if applicant.documents_sent %}
+                                    <span class="badge bg-success">Yes</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'applicant_update' applicant.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil d-none d-md-inline"></i> <span>Edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            Showing {{ upcoming_appointments|length }} upcoming appointments
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Pending Payments Section -->
+    {% if user.is_staff and pending_payments %}
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-cash-coin me-2"></i>Pending Payment Reflection
+                <span class="badge bg-white text-warning float-end">{{ pending_payments|length }}</span>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="d-none d-md-table-header-group">
+                        <tr>
+                            <th>Name</th>
+                            <th>Deposit Date</th>
+                            <th>Days Since Deposit</th>
+                            <th>Agent Fee Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for applicant in pending_payments %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'applicant_detail' applicant.pk %}">
+                                    <span class="d-md-none"><strong>{{ applicant.surname }}</strong></span>
+                                    <span class="d-none d-md-inline">{{ applicant.surname }}, {{ applicant.first_names }}</span>
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {% if applicant.deposited_at_standard_bank %}
+                                    {{ applicant.deposited_at_standard_bank|date:"D, M j, Y" }}
+                                {% else %}
+                                    <span class="text-muted">Not recorded</span>
+                                {% endif %}
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                {% if applicant.deposited_at_standard_bank %}
+                                    {% with days_since=applicant.deposited_at_standard_bank|timesince %}
+                                        <span class="badge {% if applicant.deposited_at_standard_bank|timesince|slice:":2"|add:"0" > 3 %}bg-danger{% else %}bg-warning{% endif %}">
+                                            {{ days_since }}
+                                        </span>
+                                    {% endwith %}
+                                {% else %}
+                                    <span class="badge bg-secondary">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if applicant.agent_fee_paid %}
+                                    <span class="badge bg-success">Paid</span>
+                                    <span class="d-none d-md-inline">
+                                        <small>R{{ applicant.agent_fee_paid|floatformat:2 }}</small>
+                                        {% if applicant.agent_fee_paid_date %}
+                                            <small class="text-muted">({{ applicant.agent_fee_paid_date|date:"M d Y" }})</small>
+                                        {% endif %}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger">Unpaid</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'applicant_update' applicant.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil d-none d-md-inline"></i> <span>Edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            Showing {{ pending_payments|length }} pending payments
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Applications List -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">All Applications</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="d-none d-md-table-header-group">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Passport</th>
+                            <th>Nationality</th>
+                            <th>Application Type</th>
+                            <th>Application Stage</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for applicant in applicants %}
+                        <tr>
+                            <td class="d-none d-md-table-cell">{{ applicant.id }}</td>
+                            <td>
+                                <a href="{% url 'applicant_detail' applicant.pk %}">
+                                    <span class="d-md-none"><strong>{{ applicant.surname }}</strong></span>
+                                    <span class="d-none d-md-inline">{{ applicant.surname }}, {{ applicant.first_names }}</span>
+                                </a>
+                            </td>
+                            <td class="d-none d-md-table-cell">{{ applicant.passport_number }}</td>
+                            <td class="d-none d-md-table-cell">{{ applicant.nationality }}</td>
+                            <td class="d-none d-md-table-cell">
+                                {% if applicant.previous_permit == 'Yes' %}
+                                    {{ applicant.get_applying_for_display }}
+                                {% else %}
+                                    New Application
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar 
+                                        {% if applicant.submitted %}bg-success
+                                        {% elif applicant.appointment_booked %}bg-info
+                                        {% elif applicant.payment_reflected %}bg-primary
+                                        {% elif applicant.deposit_slip_sent %}bg-warning
+                                        {% else %}bg-secondary{% endif %}" 
+                                        role="progressbar" 
+                                        style="width: 
+                                        {% if applicant.submitted %}100%
+                                        {% elif applicant.appointment_booked %}75%
+                                        {% elif applicant.payment_reflected %}50%
+                                        {% elif applicant.deposit_slip_sent %}25%
+                                        {% else %}0%{% endif %};" 
+                                        aria-valuenow="
+                                        {% if applicant.submitted %}100
+                                        {% elif applicant.appointment_booked %}75
+                                        {% elif applicant.payment_reflected %}50
+                                        {% elif applicant.deposit_slip_sent %}25
+                                        {% else %}0{% endif %}" 
+                                        aria-valuemin="0" 
+                                        aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <small class="text-muted">
+                                    {% if applicant.submitted %}Submitted
+                                    {% elif applicant.appointment_booked %}Appointment booked
+                                    {% elif applicant.payment_reflected %}Payment reflected
+                                    {% elif applicant.deposit_slip_sent %}Deposit slip sent
+                                    {% else %}Application started{% endif %}
+                                </small>
+                            </td>
+                            <td>
+                                {% if applicant.visa_status == None %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif applicant.visa_status %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'applicant_detail' applicant.pk %}" class="btn btn-primary">
+                                        <i class="bi bi-eye d-none d-md-inline"></i> <span>View</span>
+                                    </a>
+                                    <a href="{% url 'applicant_update' applicant.pk %}" class="btn btn-secondary">
+                                        <i class="bi bi-pencil d-none d-md-inline"></i> <span>Edit</span>
+                                    </a>
+                                    {% if request.user.is_staff %}
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ applicant.id }}">
+                                        <i class="bi bi-trash d-none d-md-inline"></i> <span>Delete</span>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteModal{{ applicant.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ applicant.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel{{ applicant.id }}">Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the application for {{ applicant.surname }}, {{ applicant.first_names }}?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{% url 'applicant_delete' applicant.pk %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No applications found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

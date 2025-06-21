@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Permit Application System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.55);
+            padding: 0.5rem 1rem;
+        }
+        .logout-btn:hover {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .subject-checkboxes {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+    }
+    .form-check {
+        padding: 5px;
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+    .duty-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+
+
+/* For PDF documents */
+@media print {
+    .duty-list li {
+        page-break-inside: avoid;
+    }
+}
+
+/* Subjects and Duties shared styling */
+.subject-list, .duty-list, .responsibility-items {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.subject-list li, .duty-list li, .responsibility-item {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+
+
+
+
+.clean-duty-list li:before, .duty-list li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #0d6efd; /* Bootstrap primary color */
+    font-weight: bold;
+}
+
+.clean-duty-list li:empty, .duty-list li:empty {
+    display: none;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .subject-list, .duty-list, .responsibility-items {
+        padding-left: 1rem;
+    }
+    
+    .subject-list li, .duty-list li, .responsibility-item {
+        padding-left: 1rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}">Permit System</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'applicant_create' %}">New Application</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'applicant_list' %}">View Applications</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <span class="nav-link">Welcome, {{ user.username }}</span>
+                            </li>
+                            <li class="nav-item">
+                                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="logout-btn">Logout</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Field toggler configuration - works for any form with these fields
+    const fieldToggles = {
+        maritalStatus: {
+            trigger: '#id_marital_status',
+            targets: [
+                '#id_marriage_date',
+                '#id_married_to_sa_citizen'
+            ],
+            handler: function(value) {
+                const isSingle = value === 'Single';
+                this.targets.forEach(selector => {
+                    const field = document.querySelector(selector)?.closest('.mb-3');
+                    if (field) field.style.display = isSingle ? 'none' : 'block';
+                });
+            }
+        },
+        previousPermit: {
+            trigger: '#id_previous_permit',
+            targets: ['#id_previous_permit_number'],
+            handler: function(value) {
+                const field = document.querySelector(this.targets[0])?.closest('.mb-3');
+                if (field) field.style.display = value === 'No' ? 'none' : 'block';
+            }
+        },
+        refugeeStatus: {
+            trigger: '#id_asylum_refugee_status',
+            targets: [
+                '#refugee-fields',
+                '#refugee-country-fields'
+            ],
+            handler: function(value) {
+                const isRefugee = value === 'Yes';
+                this.targets.forEach(selector => {
+                    const field = document.querySelector(selector);
+                    if (field) field.style.display = isRefugee ? 'block' : 'none';
+                });
+            }
+        },
+        employmentStatus: {
+            trigger: '#id_employed',
+            targets: ['.employment-field'],
+            handler: function(isChecked) {
+                document.querySelectorAll(this.targets[0]).forEach(field => {
+                    field.style.display = isChecked ? 'block' : 'none';
+                });
+                if (!isChecked) {
+                    const container = document.querySelector('.standard-duties-container');
+                    if (container) container.style.display = 'none';
+                }
+            }
+        },
+        jobProfile: {
+            trigger: '#id_job_profile',
+            targets: ['.standard-duties-container'],
+            handler: function(profileId) {
+                const container = document.querySelector(this.targets[0]);
+                if (!container) return;
+                
+                if (profileId) {
+                    fetch(`/api/jobprofile/${profileId}/duties/`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.json();
+                        })
+                        .then(data => {
+                            const dutiesList = container.querySelector('.standard-duties-list');
+                            if (dutiesList) {
+                                dutiesList.innerHTML = data.duties.map(d => `<li>${d}</li>`).join('');
+                                container.style.display = 'block';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error loading duties:', error);
+                            container.style.display = 'none';
+                        });
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        }
+    };
+
+    // Initialize all field toggles
+    function initializeFieldToggles() {
+        Object.values(fieldToggles).forEach(toggle => {
+            const trigger = document.querySelector(toggle.trigger);
+            if (!trigger) return;
+
+            // Initial state
+            if (trigger.type === 'checkbox') {
+                toggle.handler(trigger.checked);
+            } else {
+                toggle.handler(trigger.value);
+            }
+
+            // Add event listener
+            trigger.addEventListener('change', function() {
+                if (this.type === 'checkbox') {
+                    toggle.handler(this.checked);
+                } else {
+                    toggle.handler(this.value);
+                }
+            });
+        });
+    }
+
+    
+    // Toggle refugee info
+    const refugeeStatusField = document.querySelector('#{{ form.asylum_refugee_status.id_for_label }}');
+    const refugeeInfoSection = document.getElementById('refugeeInfoSection');
+    const refugeeRefNumberField = document.querySelector('#{{ form.refugee_reference_number.id_for_label }}');
+    const refugeeCountryField = document.querySelector('#{{ form.refugee_country.id_for_label }}');
+
+    function toggleRefugeeInfo() {
+        if (refugeeStatusField.value === 'Yes') {
+            refugeeInfoSection.style.display = 'block';
+        } else {
+            refugeeInfoSection.style.display = 'none';
+            // Clear the fields when status is "No"
+            if (refugeeRefNumberField) refugeeRefNumberField.value = '';
+            if (refugeeCountryField) refugeeCountryField.value = '';
+        }
+    }
+
+    if (refugeeStatusField) {
+        refugeeStatusField.addEventListener('change', toggleRefugeeInfo);
+        toggleRefugeeInfo(); // Initialize on page load
+    }
+
+    
+
+
+
+
+
+
+     // Toggle marriage info fields
+    const maritalStatusField = document.querySelector('#{{ form.marital_status.id_for_label }}');
+    const marriageInfoSection = document.getElementById('marriageInfoSection');
+    
+    function toggleMarriageInfoSection() {
+        marriageInfoSection.style.display = maritalStatusField.value === 'Married' ? 'block' : 'none';
+    }
+    
+    maritalStatusField.addEventListener('change', toggleMarriageInfoSection);
+    toggleMarriageInfoSection();
+    
+    // Format duties lists consistently
+    document.querySelectorAll('.duty-list, .responsibility-items').forEach(list => {
+        list.querySelectorAll('li').forEach(li => {
+            if (!li.textContent.startsWith('•') && !li.textContent.startsWith('-')) {
+                li.textContent = '• ' + li.textContent.trim();
+            }
+        });
+    });
+    
+     // Clean up duty display in all lists
+    document.querySelectorAll('.duty-list li, .clean-duty-list li').forEach(li => {
+        let text = li.textContent;
+        // Remove square brackets and quotes
+        text = text.replace(/[\[\]'"•-]/g, '').trim();
+        li.textContent = text;
+    });
+    // Toggle previous permit number field
+    const previousPermitField = document.querySelector('#{{ form.previous_permit.id_for_label }}');
+    const previousPermitSection = document.getElementById('previousPermitSection');
+
+    function togglePreviousPermitSection() {
+        if (previousPermitField.value === 'Yes') {
+            previousPermitSection.style.display = 'block';
+        } else {
+            previousPermitSection.style.display = 'none';
+            // Clear the field when switching to "No"
+            document.querySelector('#{{ form.previous_permit_number.id_for_label }}').value = '';
+        }
+    }
+
+    previousPermitField.addEventListener('change', togglePreviousPermitSection);
+    togglePreviousPermitSection(); // Initialize on page load
+
+
+     // Toggle employment details
+    const employedField = document.querySelector('#{{ form.employed.id_for_label }}');
+    const employmentDetailsSection = document.getElementById('employmentDetailsSection');
+    
+    function toggleEmploymentDetails() {
+        employmentDetailsSection.style.display = employedField.checked ? 'block' : 'none';
+    }
+    
+    employedField.addEventListener('change', toggleEmploymentDetails);
+    toggleEmploymentDetails();
+
+
+    
+    
+     
+    
+
+
+
+
+ // Job profile duties AJAX
+    const jobProfileField = document.querySelector('#{{ form.job_profile.id_for_label }}');
+    if (jobProfileField) {
+        jobProfileField.addEventListener('change', function() {
+            const profileId = this.value;
+            if (profileId) {
+                fetch(`/api/jobprofile/${profileId}/duties/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle duties data if needed
+                        console.log('Job profile duties:', data.duties);
+                    })
+                    .catch(error => console.error('Error fetching duties:', error));
+            }
+        });
+    }
+    
+    
+    // Handle job profile creation in popup - only if link exists
+    document.querySelector('.create-job-profile-link')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const popup = window.open(
+            this.href, 
+            'CreateJobProfile', 
+            'width=800,height=600,top=100,left=100'
+        );
+        
+        const checkPopup = setInterval(function() {
+            if (popup.closed) {
+                clearInterval(checkPopup);
+                // Refresh job profile select
+                const select = document.querySelector('#id_job_profile');
+                if (select) {
+                    fetch('/api/jobprofiles/')
+                        .then(response => response.json())
+                        .then(data => {
+                            select.innerHTML = data.options;
+                            // Re-trigger change event to update duties
+                            const event = new Event('change');
+                            select.dispatchEvent(event);
+                        })
+                        .catch(error => console.error('Error refreshing job profiles:', error));
+                }
+            }
+        }, 500);
+    });
+
+    // Initialize everything
+    initializeFieldToggles();
+});
+</script>
+<!-- Add this before the closing </body> tag in base.html -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="profile-to-delete"></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

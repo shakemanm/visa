@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .contract { max-width: 800px; margin: 0 auto; }
+        .title { text-align: center; font-weight: bold; margin-bottom: 30px; }
+        .party { margin-bottom: 20px; }
+        .section-title { font-weight: bold; margin: 20px 0 10px 0; }
+        .paragraph { margin-bottom: 15px; text-align: justify; }
+        .paragraph2 { margin-bottom: 15px; text-align: center; }
+        .signature { margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <div class="contract">
+        <div class="title">CONTRACT OF EMPLOYMENT</div>
+        
+        <div class="paragraph2">
+            Entered into between <br>
+            {{ applicant.employer_name|default:"[Employer Name]" }}<br>
+             (Herein after also referred to as "the employer" or "the company")<br>
+            And <br>
+            {{ applicant.first_names }} {{ applicant.surname }} ({{ applicant.passport_number }})<br>
+            (Herein after referred to as "the employee")
+        </div>
+        
+        <div class="section-title">Terms and conditions of employment</div>
+        
+        <div class="paragraph">
+            The terms and conditions set out herein will constitute the employee's contract with the company with effect from {{ applicant.commencement_date }}. Where a basic condition of employment is not specifically mentioned, the relevant legislation will be applicable (eg. the Basic Conditions of Employment Act, Act 75 of 1997, the Labour Relations Act, Act 66 of 1995 amendments to legislation etc.).
+        </div>
+        
+        <div class="section-title">1. Job description</div>
+        <div class="paragraph">
+            JOB TITLE: {{ applicant.job_profile.title|default:"[Job Title]" }}<br>
+            Although the employee has been employed in the position referred to above, he/she may be required to perform other duties that may reasonably be expected of him/her within the company from time to time.
+            During the period of employment within the company the employee will report as per company employment chart and obey instructions given by him/her and any other person duly authorised (or delegated) by the company to do so.
+        </div>
+        
+        <div class="section-title">2. Termination of employment</div>
+        <div class="paragraph">
+            This contract of employment may be terminated only on notice of not less than-<br>
+            ONE week, if the employee has been employed for six months or less;<br>
+            TWO weeks, if the employee has been employed for more than six months but not more than one year;<br>
+            FOUR weeks, if the employee has been employed for one year or more
+        </div>
+        
+        <div class="section-title">3. Probation</div>
+        <div class="paragraph">3 months</div>
+        
+        <div class="section-title">4. Remuneration</div>
+        <div class="paragraph">
+            The employee's total monthly remuneration will be R18500.00, payable in arrears on the 3rd last working day of each month. Should the regular payment date fall on a weekend or public holiday, the employer will pay the salary on the last working day before said day.<br>
+            The following will be deducted from the salary:<br>
+            PAYE<br>
+            UIF<br>
+            BENEFITS<br>
+            Annual Bonus at Company Discretion<br>
+            Profit Sharing at Company Discretion<br>
+            Annual salary negotiation<br>
+            Remuneration will be revised on an annual basis.
+        </div>
+        
+        <div class="section-title">5. Working hours</div>
+        <div class="paragraph">
+            Normal working hours will be from (08:00) to (16:30) from Mondays to Fridays.<br>
+            The employer may not require or permit the employee to work more than forty-five (45) hours per week, calculated as follows:<br>
+            Nine (9) hours on any day, if the employee works five (5) days or less a week; or<br>
+            Eight (8) hours on any day if the employee works on more than five (5) days in a week; and<br>
+            Lunch breaks are not included in this calculation.<br>
+            Hours of work in terms of item 5.2 may be extended by up to fifteen (15) minutes a day, but may not exceed one (1) hour a week. The reason for this provision is to allow the employee to finish the task at hand, especially when serving a client, at the end of a working day.<br><br>
+            
+            <strong>Meal intervals:</strong><br>
+            The employee is entitled to a lunch break of 30 minutes. Lunch breaks will be taken from 13:00 to 13:30 daily.<br><br>
+            
+            <strong>Overtime</strong><br>
+            The employee may be permitted or requested to work overtime from time to time when needed, provided that the daily overtime shall not exceed three (3) hours a day and a total of ten (10) hours a week.<br><br>
+            
+            <strong>REMUNERATION IN RESPECT OF OVERTIME</strong><br>
+            The employer shall calculate overtime remuneration at no less than 1.5 (one and one-half) the employee's hourly wage for each hour of overtime worked; or<br>
+            Pay the employee no less than the employee's ordinary wage for each hour of overtime worked and grant the employee at least thirty (30) minutes time off with full pay for every hour of overtime worked; or<br>
+            The remuneration method above will be the normal method of remuneration. Should the employer need to use one of the other options due to circumstances, he/she will inform the employee accordingly, preferably in writing, before the commencement of overtime.<br><br>
+            
+            <strong>Work on Sundays and Public Holidays</strong><br>
+            <strong>Sundays</strong><br>
+            Work on Sundays will not be compulsory, but will be agreed on by the parties to the best interest of the company and the employee from time to time.<br><br>
+            
+            <strong>Public holidays</strong><br>
+            The employee will be entitled to the following official public holidays on full pay:<br>
+            New Year's Day, Youth Day, Human Rights Day, National Women's day, Good Friday, Heritage Day, Family Day, Day of Reconciliation, Freedom Day, Christmas Day, Worker's Day, Day of Goodwill<br>
+            Any other holiday declared by Government from time to time will also be granted with full pay.<br><br>
+            
+            <strong>REMUNERATION</strong><br>
+            If the employee does not work on a public holiday, he/she shall receive normal payment for that day.<br>
+            If the parties agree that the employee should work on any of the above days, the employee shall be paid double the normal day's wage for a full day or double the hourly wage for every hour worked. The employer may also by agreement grant two (2) paid working days off in lieu of payment.<br><br>
+            
+            <strong>ANNUAL LEAVE</strong><br>
+            The employee is entitled to (15) fifteen working days leave per annum. Leave will not be granted concurrently with any other period of sick leave granted. Leave will normally not be granted within the notice period regarding termination of service.<br>
+            Leave may not be accumulated for more than eighteen (18) months, except where explicit written consent is obtained, detailing the amount of leave which may be accumulated. Motivated written application must be made to obtain such consent.<br>
+            Leave accumulated in terms of special permission referred to above will not be paid out at termination of service.<br>
+            Leave must be applied for in writing in the form and manner prescribed by the company from time to time, and may only be taken approval by the company or its delegated authority.<br><br>
+            
+            <strong>SICK LEAVE</strong><br>
+            During every sick leave cycle (12 months) the employee will be entitled to an amount of sick leave equal to the number of days the employee would normally work during a period of four (4) weeks.<br>
+            The employee will therefore be entitled to ten (10) days sick leave over a period of twelve (12) months (1 years).<br>
+            During the first six (6) months of employment the employee is entitled to one day's paid sick leave for every twenty-one (21) days worked.<br>
+            In the case where the employee is unable to attend work due to medical reasons, the employee must ensure that the company is notified as soon as reasonably possible.<br>
+            An application for sick leave must be supported by a certificate from a registered medical practitioner.<br><br>
+            
+            <strong>FAMILY RESPONSIBILITIES LEAVE</strong><br>
+            The employee will be entitled to three (3) days family responsibility leave during each leave cycle (12 months).<br>
+            The employer is only obliged to grant family responsibility leave under the following circumstances:<br>
+            1. When the employee's child is born; or<br>
+            2. When the employee's child is sick; or<br>
+            3. In the event of death of the employee's spouse or life partner, parent or adoptive parent, grandparent, child, adopted child, grandchild or sibling.<br><br>
+            
+            <strong>LEAVE WITHOUT REMUNERATION</strong><br>
+            Leave without remuneration may be granted when the employee's:<br>
+            1. Sick leave credits are insufficient or have been depleted; or<br>
+            2. Application for sick leave cannot be reasonably substantiated; or<br>
+            3. Family responsibility leave credits are insufficient or have been depleted and no vacation leave credits are available.<br>
+            The employee may apply in writing to be granted leave without remuneration for an extended period not exceeding six (6) months in exceptional circumstances. The application will be fully motivated. The employer is not obliged to approve such an application.<br>
+            If the employee is absent from duty without prior arrangement or permission, the employer may regard any period of such absence as leave without remuneration. This does not preclude the employer from taking disciplinary measures against the employee in terms of this contract.<br>
+            Leave without remuneration will affect the accumulation of vacation leave credits on a pro-rata basis.<br>
+            Leave without remuneration may affect the calculation of any bonus or reward that the employer may contemplate.<br><br>
+            
+            <strong>DEDUCTIONS FROM REMUNERATION</strong><br>
+            The employer may not deduct any monies from the employee's salary unless the employee has agreed thereto in this contract or in writing on each occasion.
+        </div>
+        
+        <div class="section-title">6. Trade secrets/confidentiality</div>
+        <div class="paragraph">
+            The employee undertakes, without prejudice to any general duty of confidentiality, not to disclose during the continuance of this contract or afterwards, any of the trade secrets of the employer or any information which is confidential to the employer's business. Trade secrets include the following, which list will not be regarded as exhaustive man-hour tariffs, logistic techniques, proposal contents, client contacts, etc.<br>
+            The employee further undertakes immediately after the termination of his/her services to hand over to the employer all documentation and data in his/her possession belonging to the employer, whether in hard copy, contained on computer disc or any other recording medium, including documents made by him/her in the course of his/her employment. The aforementioned implies that any copy, abstract, or any precis of any document belonging to the employer made by the employee or any other person shall itself belong to the employer.<br>
+            The employee will not be liable to the employer for information divulged in terms of legislation or a court order compelling him/her to do so.
+        </div>
+        
+        <div class="section-title">7. Restraint of trade</div>
+        <div class="paragraph">
+            The employee may not for a period of six (6) months from the date of termination of this contract, whether on his/her own behalf or on the behalf of any other person, close corporation, partnership or company solicit custom from, deal with or supply any person, close corporation, partnership or company with whom the employer dealt at any time during his/her employment.<br>
+            This limitation of trade is restricted to the nature of the employer's business, products and services.<br>
+            This limitation can be waived should both parties so agree.
+        </div>
+        
+        <div class="section-title">8. Exclusive service</div>
+        <div class="paragraph">
+            The appointment under this contract is a full time appointment and the employee shall devote his/her full commitment, energy and attention to the employer's business.<br>
+            The employee shall not at any time during the continuance of this contract be directly or indirectly engaged, concerned or interested, whether for reward or otherwise, in any other trade, business or profession without the explicit written consent of the employer.
+        </div>
+        
+        <div class="section-title">9. Policies, grievance and disciplinary procedure</div>
+        <div class="paragraph">
+            The employee will be subject to the company's disciplinary procedure, code of conduct and policies as determined and amended from time to time.<br>
+            The Disciplinary Procedure and Code of Conduct is annexed hereto as annex B, and forms part of this contract.<br>
+            Grievances or problems can be raised through the stipulated internal communication channels.
+        </div>
+        
+        <div class="section-title">10. General</div>
+        <div class="paragraph">
+            Any changes to this agreement will only be valid if they are in writing and have been agreed upon and signed by both parties.
+        </div>
+        
+        <div class="signature">
+            This is done and signed at {{ applicant.employer_street_address }}, {{ applicant.employer_town|default:"[Town]" }}, on {{ applicant.commencement_date }}<br><br><br>
+            <div>
+                 ___________________________________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ___________________________________________<br>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ applicant.manager_name|default:"[Manager Name]" }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp{{ applicant.first_names }} {{ applicant.surname }}<br>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Employee<br>
+            </div>
+           
+                       
+            
+            <div>
+                ___________________________________________	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________________<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Witness &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Witness<br>
+            </div>
+                            
+        </div>
+   
+   
+    </div>
+    
+</body>
+</html>

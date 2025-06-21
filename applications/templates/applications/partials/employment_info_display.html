@@ -1,0 +1,33 @@
+<div class="mb-4">
+    <h4>Employment Information</h4>
+    <hr>
+    <p><strong>Employed:</strong> {{ applicant.employed|yesno:"Yes,No" }}</p>
+    
+    {% if applicant.employed %}
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Employer Name:</strong> {{ applicant.employer_name }}</p>
+            <p><strong>Industry:</strong> {{ applicant.industry }}</p>
+            <p><strong>Job Profile:</strong> {{ applicant.job_profile.title }}</p>
+            <p><strong>Business Type:</strong> {{ applicant.get_business_type_display }}</p>
+            <p><strong>Employer Street Address:</strong> {{ applicant.employer_street_address }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Employer Town:</strong> {{ applicant.employer_town }}</p>
+            <p><strong>Employer Postal Code:</strong> {{ applicant.employer_post_code }}</p>
+            <p><strong>Years Worked:</strong> {{ applicant.years_worked }}</p>
+            <p><strong>Commencement Date:</strong> {{ applicant.commencement_date }}</p>
+            <p><strong>Manager Name:</strong> {{ applicant.manager_name }}</p>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <h5>Duties</h5>
+        <ul>
+            {% for duty in applicant.get_all_duties %}
+                <li>{{ duty }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>

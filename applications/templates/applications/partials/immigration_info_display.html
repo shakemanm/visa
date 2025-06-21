@@ -1,0 +1,17 @@
+<div class="mb-4">
+    <h4>Immigration Information</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Asylum/Refugee Status:</strong> {{ applicant.asylum_refugee_status }}</p>
+            {% if applicant.asylum_refugee_status == 'Yes' %}
+                <p><strong>Refugee Reference Number:</strong> {{ applicant.refugee_reference_number }}</p>
+                <p><strong>Refugee Country:</strong> {{ applicant.refugee_country }}</p>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <p><strong>Date of Entry to SA:</strong> {{ applicant.date_of_entry_sa }}</p>
+            <p><strong>Place of Entry to SA:</strong> {{ applicant.place_of_entry_sa }}</p>
+        </div>
+    </div>
+</div>

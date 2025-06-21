@@ -1,0 +1,73 @@
+<div class="card mb-4">
+    <div class="card-header">Employment Information</div>
+    <div class="card-body">
+        <div class="mb-3 form-check">
+            {{ form.employed }}
+            <label class="form-check-label" for="{{ form.employed.id_for_label }}">
+                {{ form.employed.label }}
+            </label>
+        </div>
+        
+        <div id="employment-fields">
+            <div class="row g-3 employment-field">
+                <div class="col-md-6">
+                    {{ form.employer_name.label_tag }}
+                    {{ form.employer_name }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.industry.label_tag }}
+                    {{ form.industry }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.business_type.label_tag }}
+                    {{ form.business_type }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.job_profile.label_tag }}
+                    {{ form.job_profile }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.years_worked.label_tag }}
+                    {{ form.years_worked }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.commencement_date.label_tag }}
+                    {{ form.commencement_date }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.employer_street_address.label_tag }}
+                    {{ form.employer_street_address }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.employer_place.label_tag }}
+                    {{ form.employer_place }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.employer_town.label_tag }}
+                    {{ form.employer_town }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.employer_post_code.label_tag }}
+                    {{ form.employer_post_code }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.manager_name.label_tag }}
+                    {{ form.manager_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.reference.label_tag }}
+                    {{ form.reference }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.previous_employer.label_tag }}
+                    {{ form.previous_employer }}
+                </div>
+                <div class="col-12">
+                    {{ form.custom_duties.label_tag }}
+                    {{ form.custom_duties }}
+                    <small class="form-text text-muted">{{ form.custom_duties.help_text }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

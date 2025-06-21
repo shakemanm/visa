@@ -1,0 +1,34 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <h4><i class="bi bi-person me-2"></i>Personal Information</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Title:</strong> {{ applicant.get_title_display }}</p>
+                <p><strong>Name:</strong> {{ applicant.first_names }} {{ applicant.surname }}</p>
+                <p><strong>Date of Birth:</strong> {{ applicant.date_of_birth|date:"Y-m-d" }}</p>
+                <p><strong>Place of Birth:</strong> {{ applicant.city_of_birth }}, {{ applicant.get_country_of_birth_display }}</p>
+                <p><strong>Nationality:</strong> {{ applicant.get_nationality_display }}</p>
+                <p><strong>Present Nationality:</strong> {{ applicant.get_present_nationality_display }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Marital Status:</strong> {{ applicant.get_marital_status_display }}</p>
+                {% if applicant.marital_status != 'Single' %}
+                    <p><strong>Marriage Date:</strong> {{ applicant.marriage_date|date:"Y-m-d" }}</p>
+                    <p><strong>Married to SA Citizen:</strong> {{ applicant.married_to_sa_citizen|yesno:"Yes,No" }}</p>
+                {% endif %}
+                <p><strong>Passport Number:</strong> {{ applicant.passport_number }}</p>
+                <p><strong>Passport Issue Date:</strong> {{ applicant.passport_issue_date|date:"Y-m-d" }}</p>
+                <p><strong>Passport Expiry Date:</strong> {{ applicant.passport_expiry_date|date:"Y-m-d" }}</p>
+                <p><strong>Passport Issued By:</strong> {{ applicant.get_passport_issued_by_display }}</p>
+                <!-- Add the new fields here -->
+                <p><strong>Previous Permit:</strong> {{ applicant.get_previous_permit_display }}</p>
+                {% if applicant.previous_permit == 'Yes' %}
+                    <p><strong>Previous Permit Number:</strong> {{ applicant.previous_permit_number }}</p>
+                    <p><strong>Applying For:</strong> {{ applicant.get_applying_for_display }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

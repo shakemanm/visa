@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h2>Application Submitted Successfully</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                <h4 class="alert-heading">Thank You!</h4>
+                <p>Your application has been received successfully.</p>
+                <hr>
+                <p class="mb-0">We will review your information and contact you if we need any additional details.</p>
+            </div>
+            <div class="d-grid gap-2">
+                <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

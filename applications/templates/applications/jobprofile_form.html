@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Edit{% else %}Create{% endif %} Job Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>{% if object %}Edit{% else %}Create{% endif %} Job Profile</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" id="jobProfileForm">
+                {% csrf_token %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.title.label_tag }}
+                        {{ form.title }}
+                        <small class="text-muted">E.g., 'Software Engineer', 'Nurse Practitioner'</small>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.industry.label_tag }}
+                        {{ form.industry }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.business_type.label_tag }}
+                    {{ form.business_type }}
+                    <small class="text-muted">Select the primary business sector for this job</small>
+                </div>
+                
+                <!-- Duties Section -->
+                <div class="mb-3">
+                <label class="form-label">Duties/Responsibilities</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="dutyInput" 
+                        placeholder="Enter a duty/responsibility">
+                    <button class="btn btn-outline-primary" type="button" id="addDutyBtn">
+                        Add
+                    </button>
+                </div>
+                
+                <div class="mb-3">
+                    <ul class="list-group" id="dutiesList">
+                        {% if form.duties_json.value %}
+                            <script>
+                                // Store initial duties in JavaScript variable
+                                var initialDuties = JSON.parse('{{ form.duties_json.value|escapejs }}');
+                            </script>
+                        {% endif %}
+                    </ul>
+                </div>
+                {{ form.duties_json }}
+            </div>
+                
+                <div class="form-check mb-3">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                        Active (available for selection)
+                    </label>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Save Profile
+                    </button>
+                    <a href="{% if object %}{% url 'jobprofile_list' %}{% else %}{% url 'home' %}{% endif %}" 
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addDutyBtn = document.getElementById('addDutyBtn');
+    const dutyInput = document.getElementById('dutyInput');
+    const dutiesList = document.getElementById('dutiesList');
+    const dutiesJsonField = document.getElementById('id_duties_json');
+    let duties = [];
+    
+    // Initialize with existing duties
+    try {
+        if (typeof initialDuties !== 'undefined') {
+            duties = initialDuties;
+        } else {
+            duties = JSON.parse(dutiesJsonField.value || '[]');
+        }
+        renderDuties();
+    } catch (e) {
+        console.error('Error parsing initial duties:', e);
+        duties = [];
+    }
+    
+    // Add new duty
+    addDutyBtn.addEventListener('click', function() {
+        const dutyText = dutyInput.value.trim();
+        if (dutyText && !duties.includes(dutyText)) {
+            duties.push(dutyText);
+            renderDuties();
+            updateDutiesJson();
+            dutyInput.value = '';
+            dutyInput.focus();
+        }
+    });
+    
+    // Remove duty
+    dutiesList.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-duty') || e.target.closest('.remove-duty')) {
+            const listItem = e.target.closest('li');
+            const dutyIndex = Array.from(dutiesList.children).indexOf(listItem);
+            if (dutyIndex > -1) {
+                duties.splice(dutyIndex, 1);
+                renderDuties();
+                updateDutiesJson();
+            }
+        }
+    });
+    
+    // Allow adding duty with Enter key
+    dutyInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addDutyBtn.click();
+        }
+    });
+    
+    function renderDuties() {
+        dutiesList.innerHTML = '';
+        if (duties.length === 0) {
+            const emptyState = document.createElement('li');
+            emptyState.className = 'list-group-item text-muted';
+            emptyState.textContent = 'No duties added yet';
+            dutiesList.appendChild(emptyState);
+        } else {
+            duties.forEach(function(duty, index) {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    ${duty}
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-duty">
+                        ×
+                    </button>
+                `;
+                dutiesList.appendChild(li);
+            });
+        }
+    }
+    
+    function updateDutiesJson() {
+        dutiesJsonField.value = JSON.stringify(duties);
+    }
+    
+    // Initial render
+    renderDuties();
+});
+</script>
+{% endblock %}

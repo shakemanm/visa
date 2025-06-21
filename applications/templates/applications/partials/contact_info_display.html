@@ -1,0 +1,18 @@
+<div class="mb-4">
+    <h4>Contact Information</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Address:</strong> {{ applicant.house_number_and_street }}</p>
+            <p><strong>Suburb:</strong> {{ applicant.suburb }}</p>
+            <p><strong>Town/City:</strong> {{ applicant.town_or_city }}</p>
+            <p><strong>Postal Code:</strong> {{ applicant.postal_code }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Cell Phone:</strong> {{ applicant.cell_phone_number }}</p>
+            <p><strong>Work Phone:</strong> {{ applicant.work_phone_number|default:"Not provided" }}</p>
+            <p><strong>WhatsApp:</strong> {{ applicant.whatsapp_number|default:"Not provided" }}</p>
+            <p><strong>Email:</strong> {{ applicant.email|default:"Not provided" }}</p>
+        </div>
+    </div>
+</div>

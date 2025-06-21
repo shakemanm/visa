@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Application Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Application Details</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Application #{{ applicant.id }}</span>
+            <div>
+                <span class="badge bg-{% if applicant.visa_status == None %}warning{% elif applicant.visa_status %}success{% else %}danger{% endif %}">
+                    {% if applicant.visa_status == None %}Pending{% elif applicant.visa_status %}Approved{% else %}Rejected{% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% include 'applications/partials/personal_info_display.html' %}
+            {% include 'applications/partials/contact_info_display.html' %}
+            
+            <!-- Employment Info Section -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4><i class="bi bi-briefcase me-2"></i>Employment Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Employment Status:</strong> 
+                                {% if applicant.employed %}Employed{% else %}Not Employed{% endif %}</p>
+                            <p><strong>Employer Name:</strong> {{ applicant.employer_name|default:"Not specified" }}</p>
+                            <p><strong>Job Title:</strong> {{ applicant.job_profile.title|default:"Not specified" }}</p>
+                            <p><strong>Industry:</strong> {{ applicant.industry|default:"Not specified" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Business Type:</strong> {{ applicant.get_business_type_display|default:"Not specified" }}</p>
+                            <p><strong>Years Worked:</strong> {{ applicant.years_worked|default:"0" }}</p>
+                            <p><strong>Commencement Date:</strong> 
+                                {% if applicant.commencement_date %}{{ applicant.commencement_date|date:"Y-m-d" }}{% else %}Not specified{% endif %}</p>
+                            <p><strong>Manager Name:</strong> {{ applicant.manager_name|default:"Not specified" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5>Employer Address</h5>
+                            <p>{{ applicant.employer_street_address|default:"Not specified" }}</p>
+                            <p>{{ applicant.employer_place|default:"" }} {{ applicant.employer_town|default:"" }}</p>
+                            <p>{{ applicant.employer_post_code|default:"" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Previous Employment</h5>
+                            <p><strong>Previous Employer:</strong> {{ applicant.previous_employer|default:"Not specified" }}</p>
+                            <p><strong>Reference:</strong> {{ applicant.reference|default:"Not specified" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">Key Responsibilities</div>
+                        <div class="card-body">
+                            <ul class="duty-list">
+                                {% for duty in applicant.get_all_duties %}
+                                <li>{{ duty }}</li>
+                                {% empty %}
+                                <li>No duties specified</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    
+            {% include 'applications/partials/education_info_display.html' %}
+            {% include 'applications/partials/immigration_info_display.html' %}
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="{% url 'applicant_update' applicant.pk %}" class="btn btn-primary me-md-2">Edit Application</a>
+                <a href="{% url 'applicant_list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h4>Documents</h4>
+        <div class="btn-group">
+            <a href="{% url 'generate_document' object.pk 'cv' %}" class="btn btn-outline-primary">
+                Generate CV
+            </a>
+            <a href="{% url 'generate_document' object.pk 'motivation' %}" class="btn btn-outline-secondary">
+                Generate Motivation Letter
+            </a>
+            <a href="{% url 'generate_document' object.pk 'contract' %}" class="btn btn-outline-success">
+                Generate Contract
+            </a>
+        </div>
+        
+        {% if object.cv_generated %}
+        <div class="mt-2">
+            <small class="text-muted">CV generated on {{ object.cv_generated_date }}</small>
+        </div>
+        {% endif %}
+        
+        {% if object.motivation_letter_generated %}
+        <div class="mt-2">
+            <small class="text-muted">Motivation letter generated on {{ object.motivation_letter_date }}</small>
+        </div>
+        {% endif %}
+        
+        {% if object.contract_generated %}
+        <div class="mt-2">
+            <small class="text-muted">Contract generated on {{ object.contract_date }}</small>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

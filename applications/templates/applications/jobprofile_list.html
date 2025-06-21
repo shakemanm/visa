@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Job Profiles Management{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-briefcase me-2"></i>Job Profiles
+        </h2>
+        <div>
+            <a href="{% url 'jobprofile_create' %}" class="btn btn-primary me-2">
+                <i class="bi bi-plus-circle me-1"></i>Create New
+            </a>
+            <a href="{% url 'jobprofile_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            {% if messages %}
+            <div class="alert-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="table-responsive">
+                <table class="table table-hover" id="job-profiles-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Industry</th>
+                            <th>Duties Count</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in job_profiles %}
+                        <tr>
+                            <td>{{ profile.title }}</td>
+                            <td>{{ profile.industry }}</td>
+                            <td>{{ profile.duties|length }}</td>
+                            <td>
+                                <span class="badge {% if profile.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                    {{ profile.is_active|yesno:"Active,Inactive" }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Job profile actions">
+                                    <a href="{% url 'jobprofile_update' profile.pk %}" 
+                                       class="btn btn-outline-primary"
+                                       title="Edit {{ profile.title }}"
+                                       aria-label="Edit">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <form method="post" action="{% url 'jobprofile_delete' profile.pk %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger" 
+                                                onclick="return confirm('Are you sure you want to delete {{ profile.title }}?')"
+                                                {% if not request.user.is_staff %}disabled{% endif %}
+                                                title="Delete {{ profile.title }}"
+                                                aria-label="Delete">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                No job profiles found. <a href="{% url 'jobprofile_create' %}">Create one?</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

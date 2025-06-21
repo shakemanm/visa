@@ -1,0 +1,77 @@
+<div class="card mb-4">
+    <div class="card-header">Personal Information</div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-2">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </div>
+            <div class="col-md-5">
+                {{ form.surname.label_tag }}
+                {{ form.surname }}
+            </div>
+            <div class="col-md-5">
+                {{ form.first_names.label_tag }}
+                {{ form.first_names }}
+            </div>
+            <div class="col-md-4">
+                {{ form.date_of_birth.label_tag }}
+                {{ form.date_of_birth }}
+            </div>
+            <div class="col-md-4">
+                {{ form.country_of_birth.label_tag }}
+                {{ form.country_of_birth }}
+            </div>
+            <div class="col-md-4">
+                {{ form.city_of_birth.label_tag }}
+                {{ form.city_of_birth }}
+            </div>
+            <div class="col-md-4">
+                {{ form.nationality.label_tag }}
+                {{ form.nationality }}
+            </div>
+            <div class="col-md-4">
+                {{ form.present_nationality.label_tag }}
+                {{ form.present_nationality }}
+            </div>
+            <div class="col-md-4">
+                {{ form.marital_status.label_tag }}
+                {{ form.marital_status }}
+            </div>
+            <div class="col-md-4 mb-3" id="marriage-date-field">
+                {{ form.marriage_date.label_tag }}
+                {{ form.marriage_date }}
+            </div>
+            <div class="col-md-4 mb-3" id="married-to-sa-field">
+                {{ form.married_to_sa_citizen.label_tag }}
+                <div class="form-check">
+                    {{ form.married_to_sa_citizen }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                {{ form.passport_number.label_tag }}
+                {{ form.passport_number }}
+            </div>
+            <div class="col-md-4">
+                {{ form.passport_issue_date.label_tag }}
+                {{ form.passport_issue_date }}
+            </div>
+            <div class="col-md-4">
+                {{ form.passport_expiry_date.label_tag }}
+                {{ form.passport_expiry_date }}
+            </div>
+            <div class="col-md-6">
+                {{ form.passport_issued_by.label_tag }}
+                {{ form.passport_issued_by }}
+            </div>
+            <div class="col-md-3">
+                {{ form.previous_permit.label_tag }}
+                {{ form.previous_permit }}
+            </div>
+            <div class="col-md-3 mb-3" id="previous-permit-field">
+                {{ form.previous_permit_number.label_tag }}
+                {{ form.previous_permit_number }}
+            </div>
+        </div>
+    </div>
+</div>

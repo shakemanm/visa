@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            line-height: 1.3;
+            margin: 0;
+            padding: 20px;
+            font-size: 12pt;
+            text-align: left;
+        }
+        .letter {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .address-block {
+            margin-bottom: 20px;
+        }
+        .subject-line {
+            font-weight: bold;
+            margin: 15px 0;
+            text-decoration: underline;
+        }
+        .salutation {
+            margin-bottom: 10px;
+        }
+        .paragraph {
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        .regulation {
+            margin-bottom: 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .signature-block {
+            margin-top: 30px;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .undertaking-title {
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+        }
+        .undertaking-item {
+            margin-left: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="letter">
+        {% if applicant.previous_permit == 'Yes' %}
+        <!-- Employer Letter for Previous Permit Holder -->
+        <div class="header">{{ date }}</div>
+        
+        <div class="address-block">
+            Department of Home Affairs<br>
+            Republic of South Africa
+        </div>
+        
+        <div class="subject-line">
+            RE: Letter of motivation for a Waiver on Temporary Residence/General Work Permit requirements for 
+            {{ applicant.title }}. {{ applicant.first_names }} {{ applicant.surname }} (Passport number {{ applicant.passport_number }})
+        </div>
+        
+        <div class="salutation">Dear Sir/Madam</div>
+        
+        <div class="regulation">1. Regulation 16 (4) (b):</div>
+        <div class="paragraph">
+            The employee does not possess any qualifications for evaluation by the South African Qualifications Authority (SAQA) since {{ applicant.first_names }} was not employed based on qualifications, but was employed based on {{ applicant.his_her }} experience, ability and determination. After {{ applicant.he_she }} was employed, {{ applicant.he_she }} has proved to be hard working and trustworthy.
+        </div>
+        
+        <div class="regulation">2. Regulations 16 (4) (c):</div>
+        <div class="paragraph">
+            The proof of experience and skills is the number of years {{ applicant.surname }} has been working for our family as a {{ applicant.job_profile.title|default:"[POSITION]" }}, which is going to take the same amount of time to find someone to have the same experience for the smooth running of our business. {{ applicant.He_She }} did get the experience and skills while performing {{ applicant.his_her }} duties in {{ applicant.his_her }} previous jobs and in {{ applicant.his_her }} current position.
+        </div>
+        
+        <div class="regulation">3. Regulation 16 (4) (d):</div>
+        <div class="paragraph">
+            The employee was hired after we had seen proof that the candidate was in the country legally. {{ applicant.He_She }} had a {{ applicant.previous_permit_number }} permit which allowed {{ applicant.him_her }} to live and work in South Africa.
+        </div>
+        
+        <div class="regulation">4. Regulation 16 (4) (e):</div>
+        <div class="paragraph">
+            The position was not advertised as it was created due to us needing a fulltime {{ applicant.job_profile.title|default:"[POSITION]" }}. Our previous worker had done some casual work for us, but when {{ applicant.he_she }} left without notice, we hired {{ applicant.first_names }}, who immediately became the best fit for the position, immediately gelling with our family.
+        </div>
+        
+        <div class="regulation">5. Regulation 31(2) (c) and regulation 18(3) (c) of the Immigration Act no.13 of 2002:</div>
+        <div class="paragraph">
+            The employee does not possess a labour certificate. {{ applicant.He_She }} is a {{ applicant.previous_permit_number }} holder and has been employed by us for {{ applicant.years_worked|default:"X" }} years as a {{ applicant.job_profile.title|default:"[POSITION]" }}. With {{ applicant.his_her }} skill set and experience {{ applicant.he_she }} is an indispensable employee.
+        </div>
+        
+        <div class="paragraph">
+            We hereby request your honourable department to grant {{ applicant.first_names }} {{ applicant.surname }} the waiver {{ applicant.he_she }} needs so that {{ applicant.he_she }} can go on and apply for a General Work Visa, which {{ applicant.he_she }} will then use to work, while possible training a local to eventually take over from {{ applicant.him_her }} when {{ applicant.he_she }} eventually leaves.
+        </div>
+        
+        <div class="signature-block">
+            Yours faithfully<br><br>
+            <strong>{{ applicant.manager_name|default:"[FULL NAME]" }}</strong><br>
+            <strong>For:</strong> {{ applicant.employer_name|default:"[EMPLOYER NAME]" }}
+        </div>
+        
+        <!-- Employer Undertaking Letters -->
+        <div class="page-break"></div>
+        <div class="header">{{ date }}</div>
+        
+        <div class="address-block">
+            Department of Home Affairs<br>
+            Republic of South Africa<br><br>
+            Attention: Director-General of Home Affairs<br>
+            Subject: Employer Undertaking – Compliance with Immigration Act (9(1)(a))
+        </div>
+        
+        <div class="salutation">Dear Sir/Madam,</div>
+        
+        <div class="paragraph">
+            I, {{ applicant.manager_name|default:"[FULL NAME]" }} (Employer), hereby formally undertake the following in relation to my employee, {{ applicant.first_names }} {{ applicant.surname }}:
+        </div>
+        
+        <div class="undertaking-title">Passport Validity:</div>
+        <div class="undertaking-item">
+            I undertake to ensure that the passport of the above-mentioned employee is valid at all times for the duration of {{ applicant.his_her }} employment.
+        </div>
+        
+        <div class="undertaking-title">Deportation Costs:</div>
+        <div class="undertaking-item">
+            I accept full responsibility for all costs related to the deportation of the applicant and {{ applicant.his_her }} dependent family members, should it become necessary.
+        </div>
+        
+        <div class="undertaking-title">Reporting Non-Compliance:</div>
+        <div class="undertaking-item">
+            I further undertake to immediately inform the Director-General should the applicant fail to comply with the provisions of the Immigration Act or the conditions of {{ applicant.his_her }} visa.
+        </div>
+        
+        <div class="paragraph">
+            This undertaking is given in accordance with the relevant provisions of the Immigration Act, and I acknowledge that failure to adhere to these obligations may result in legal consequences.
+        </div>
+        
+        <div class="signature-block">
+            Yours faithfully,<br><br>
+            <strong>{{ applicant.manager_name|default:"[FULL NAME]" }}</strong>
+        </div>
+        
+        <div class="page-break"></div>
+        <div class="header">{{ date }}</div>
+        
+        <div class="address-block">
+            Department of Home Affairs<br>
+            Republic of South Africa<br><br>
+            Attention: Director-General of Home Affairs<br>
+            Subject: Employer Undertaking – Notification of Employee Status Changes
+        </div>
+        
+        <div class="salutation">Dear Sir/Madam,</div>
+        
+        <div class="paragraph">
+            I, {{ applicant.manager_name|default:"[FULL NAME]" }} (Employer), hereby formally undertake the following regarding my employee, {{ applicant.first_names }} {{ applicant.surname }}:
+        </div>
+        
+        <div class="undertaking-title">Notification of Employment Termination/Change:</div>
+        <div class="undertaking-item">
+            I undertake to promptly inform the Director-General if:
+        </div>
+        <div class="undertaking-item">
+            • The employee is no longer in my employ,
+        </div>
+        <div class="undertaking-item">
+            • {{ applicant.His_Her }} employment is terminated, or
+        </div>
+        <div class="undertaking-item">
+            • {{ applicant.He_She }} is employed in a different capacity or role within the organization.
+        </div>
+        
+        <div class="paragraph">
+            This undertaking is made in compliance with the Immigration Act, and I understand the legal obligation to report such changes without delay.
+        </div>
+        
+        <div class="signature-block">
+            Yours faithfully,<br><br>
+            <strong>{{ applicant.manager_name|default:"[FULL NAME]" }}</strong>
+        </div>
+        
+        {% else %}
+        <!-- Employer Letter for Non-Permit Holder (Future Tense) -->
+        <div class="header">{{ date }}</div>
+        
+        <div class="address-block">
+            Department of Home Affairs<br>
+            Republic of South Africa
+        </div>
+        
+        <div class="subject-line">
+            RE: Letter of motivation for a Waiver on Temporary Residence/General Work Permit requirements for 
+            {{ applicant.title }}. {{ applicant.first_names }} {{ applicant.surname }} (Passport number {{ applicant.passport_number }})
+        </div>
+        
+        <div class="salutation">Dear Sir/Madam</div>
+        
+        <div class="paragraph">
+            I am writing to formally request a waiver for {{ applicant.title }} {{ applicant.first_names }} {{ applicant.surname }}, prospective employee and holder of passport number {{ applicant.passport_number }}, to fulfill the permit requirements essential for {{ applicant.his_her }} forthcoming employment with our organization. Below, I outline the justifications for each relevant regulation:
+        </div>
+        
+        <div class="regulation">1. Regulation 16 (4) (b):</div>
+        <div class="paragraph">
+            {{ applicant.title }} {{ applicant.surname }}'s prospective employment will be based on {{ applicant.his_her }} substantial experience, exceptional abilities, and unwavering determination rather than formal qualifications. Therefore, we will not require {{ applicant.his_her }} qualifications to be assessed by the South African Qualifications Authority (SAQA).
+        </div>
+        
+        <div class="regulation">2. Regulation 16 (4) (c):</div>
+        <div class="paragraph">
+            The candidate possesses extensive experience that will be demonstrated once {{ applicant.he_she }} begins working as our {{ applicant.job_profile.title|default:"[POSITION]" }}. It would take considerable time to find someone with comparable experience, which makes {{ applicant.him_her }} uniquely qualified for this position.
+        </div>
+        
+        <div class="regulation">3. Regulation 16 (4) (d):</div>
+        <div class="paragraph">
+            Before commencing employment, {{ applicant.title }} {{ applicant.surname }} will provide evidence of {{ applicant.his_her }} legal status in the country, ensuring full compliance with all regulatory prerequisites.
+        </div>
+        
+        <div class="regulation">4. Regulation 16 (4) (e):</div>
+        <div class="paragraph">
+            We have not advertised this position as it has been created specifically to meet our need for a full-time {{ applicant.job_profile.title|default:"[POSITION]" }}. Based on {{ applicant.title }} {{ applicant.surname }}'s demonstrated skills during the interview process, we are confident {{ applicant.he_she }} will prove to be the ideal candidate for this role.
+        </div>
+        
+        <div class="regulation">5. Regulation 31(2) (c) and regulation 18(3) (c) of the Immigration Act no.13 of 2002:</div>
+        <div class="paragraph">
+            While {{ applicant.title }} {{ applicant.surname }} does not possess a labor certificate, {{ applicant.his_her }} unique skill set and extensive experience will make {{ applicant.him_her }} an invaluable addition to our team once {{ applicant.he_she }} begins employment.
+        </div>
+        
+        <div class="paragraph">
+            Given the aforementioned, we respectfully request your honorable department to grant {{ applicant.title }} {{ applicant.first_names }} {{ applicant.surname }} the requisite waiver to proceed with {{ applicant.his_her }} application for a General Work Visa. This will enable {{ applicant.him_her }} to commence employment with us, with the prospect of eventually training a local successor.
+        </div>
+        
+        <div class="paragraph">
+            We appreciate your consideration of this matter and look forward to your positive response.
+        </div>
+        
+        <div class="signature-block">
+            Yours Faithfully,<br><br>
+            <strong>{{ applicant.manager_name|default:"[FULL NAME]" }}</strong><br>
+            <strong>For:</strong> {{ applicant.employer_name|default:"[EMPLOYER NAME]" }}
+        </div>
+        
+        <!-- Personal Letter from Applicant (Future Tense) -->
+        <div class="page-break"></div>
+        <div class="header">{{ date }}</div>
+        
+        <div class="address-block">
+            Department of Home Affairs<br>
+            Republic of South Africa<br><br>
+            Attention: Minister of Home Affairs
+        </div>
+        
+        <div class="subject-line">
+            RE: Personal Motivation Letter for Work Visa Waiver Application (Passport No: {{ applicant.passport_number }})
+        </div>
+        
+        <div class="salutation">Dear Honorable Minister,</div>
+        
+        <div class="paragraph">
+            I, {{ applicant.first_names }} {{ applicant.surname }}, holder of passport number {{ applicant.passport_number }}, respectfully submit this personal motivation letter in support of my application for a work visa waiver.
+        </div>
+        
+        <div class="paragraph">
+            I have been offered employment as a {{ applicant.job_profile.title|default:"[POSITION]" }} with {{ applicant.employer_name|default:"[EMPLOYER NAME]" }}. Once my work visa is approved, I will begin working in this position where I will apply the skills and experience I have gained over {{ applicant.years_worked|default:"X" }} years in this field.
+        </div>
+        
+        <div class="paragraph">
+            I believe my prospective employment will not disadvantage any South African citizen or permanent resident, as the position requires specific skills and experience that I have developed throughout my career. I am committed to performing my duties to the highest standard and contributing positively to my employer's operations.
+        </div>
+        
+        <div class="paragraph">
+            I intend to make South Africa my home and am committed to complying with all immigration regulations and laws of this country. I will respect the conditions of any visa granted to me and contribute positively to South African society.
+        </div>
+        
+        <div class="paragraph">
+            I humbly request your favorable consideration of my waiver application, which will allow me to legally work and support myself while maintaining proper immigration status in this country that I hope to call home.
+        </div>
+        
+        <div class="paragraph">
+            Thank you for your time and consideration of my application. I remain available to provide any additional information that may be required.
+        </div>
+        
+        <div class="signature-block">
+            Yours faithfully,<br><br>
+            <strong>{{ applicant.first_names }} {{ applicant.surname }}</strong><br>
+            Contact: {{ applicant.cell_phone_number }}<br>
+            Email: {{ applicant.email|default:"[EMAIL]" }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

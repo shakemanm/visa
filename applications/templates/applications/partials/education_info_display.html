@@ -1,0 +1,18 @@
+<div class="mb-4">
+    <h4>Education Information</h4>
+    <hr>
+    <p><strong>School:</strong> {{ applicant.school|default:"Not provided" }}</p>
+    
+    {% if applicant.subjects %}
+    <div class="mt-3">
+        <h5>Subjects</h5>
+        <div class="row">
+            {% for subject in applicant.subjects %}
+                <div class="col-md-3">
+                    <span class="badge bg-secondary">{{ subject }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>

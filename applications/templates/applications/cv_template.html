@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <style>
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.2;
+            margin: 1.5cm;
+            color: #000000;
+        }
+        h1 {
+            color: #2E74B5;
+            border-bottom: 2px solid #2E74B5;
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 12pt;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+        }
+        .contact-info {
+            margin-bottom: 16pt;
+            line-height: 1.4;
+            font-size: 11pt;
+        }
+        .section {
+            margin-bottom: 16pt;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #2E74B5;
+            margin-bottom: 8pt;
+            text-transform: uppercase;
+            font-size: 11pt;
+            border-bottom: 1px solid #D9D9D9;
+            padding-bottom: 3px;
+        }
+        .profile {
+            margin-bottom: 12pt;
+            line-height: 1.4;
+            font-size: 11pt;
+        }
+        
+        /* Bullet list styling */
+        .bullet-list {
+            margin: 8pt 0;
+            padding-left: 20pt;
+            list-style-type: none;
+            font-size: 11pt;
+        }
+        .bullet-list li {
+            position: relative;
+            margin-bottom: 6pt;
+            line-height: 1.4;
+        }
+        .bullet-list li:before {
+            content: "•";
+            position: absolute;
+            left: -10pt;
+            color: #2E74B5;
+            font-weight: bold;
+        }
+        
+        .job-header {
+            margin-bottom: 8pt;
+            font-size: 11pt;
+        }
+        .job-title {
+            font-weight: bold;
+            font-size: 11pt;
+        }
+        .job-company {
+            font-weight: bold;
+            font-size: 11pt;
+        }
+        .job-period {
+            font-style: italic;
+            color: #5A5A5A;
+            font-size: 11pt;
+        }
+        
+        /* Print adjustments */
+        @media print {
+            body {
+                margin: 1cm;
+                font-size: 11pt;
+            }
+            .bullet-list li {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ applicant.first_names }} {{ applicant.surname }}</h1>
+    
+    <div class="contact-info">
+        <strong>Address:</strong> {{ applicant.house_number_and_street }}, {{ applicant.suburb }}, {{ applicant.town_or_city }}<br>
+        <strong>Phone:</strong> {{ applicant.cell_phone_number }}<br>
+        <strong>Email:</strong> {{ applicant.email }}
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Professional Profile</div>
+        <div class="profile">
+            {{ applicant.job_profile.description|default:"Reliable and hardworking professional with excellent organizational skills. Known for attention to detail and ability to work effectively in team environments. Committed to delivering high-quality results in all tasks." }}
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Personal Details</div>
+        <ul class="bullet-list">
+            <li><strong>Date of Birth:</strong> {{ applicant.date_of_birth|date:"d F Y" }}</li>
+            <li><strong>Gender:</strong> {% if applicant.title == 'Mr' %}Male{% else %}Female{% endif %}</li>
+            <li><strong>Age:</strong> {{ age }}</li>
+            <li><strong>Marital Status:</strong> {{ applicant.marital_status }}</li>
+            <li><strong>Nationality:</strong> {{ applicant.nationality }}</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Education</div>
+        <div class="job-company">{{ applicant.school|default:"Nkhata Bay Secondary School" }}</div>
+        <div class="job-period">O-Level</div>
+        <ul class="bullet-list">
+            {% if subjects %}
+                {% for subject in subjects %}
+                <li>{{ subject }}</li>
+                {% endfor %}
+            {% else %}
+                <li>Geography</li>
+                <li>Commerce</li>
+                <li>Chewa</li>
+                <li>Inter-Science</li>
+                <li>Accounts</li>
+                <li>Mathematics</li>
+                <li>English</li>
+            {% endif %}
+        </ul>
+    </div>
+    
+   
+    
+    <!-- Current/Main Employment -->
+<div class="section">
+    <div class="section-title">Work Experience</div>
+    
+    <!-- For applicants WITH previous permit (use commencement date) -->
+    {% if applicant.previous_permit == 'Yes' %}
+    <div class="job-header">
+        <span class="job-company">Employer: </span>{{ applicant.employer_name|default:"[Current Employer]" }}<br>
+        <span class="job-title">Position: </span>{{ applicant.job_profile.title|default:"[Job Title]" }}<br>
+        <span class="job-period">
+            Period: {{ applicant.commencement_date|date:"F Y" }} to Present
+        </span>
+    </div>
+
+    <!-- For applicants WITHOUT previous permit (use years_worked) -->
+    {% else %}
+    <div class="job-header">
+        <span class="job-company">Employer: </span>{{ applicant.previous_employer|default:"[Previous Employer]" }}<br>
+        <span class="job-title">Position: </span>{{ applicant.job_profile.title|default:"[Job Title]" }}<br>
+        <span class="job-period">
+ Period: {{ work_period }}
+                </span>
+            </div>
+            {% endif %}
+
+    <div style="margin-top: 8pt;">
+        <div class="section-title" style="font-size: 11pt; font-weight: bold;">Key Responsibilities</div>
+        <ul class="bullet-list">
+            {% for duty in applicant.get_all_duties %}
+            <li>{{ duty }}</li>
+            {% empty %}
+            <li>Performed various operational duties as assigned</li>
+            <li>Maintained cleanliness and organization of work areas</li>
+            <li>Followed all workplace safety protocols and procedures</li>
+            <li>Provided excellent customer service when required</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+    
+    <div class="section">
+        <div class="section-title">Skills</div>
+        <ul class="bullet-list">
+            <li><strong>Technical:</strong> Computer skills (Microsoft Office, email, internet)</li>
+            <li><strong>Languages:</strong> Fluent in English and local languages</li>
+            <li><strong>Operational:</strong> Time management, problem solving, teamwork</li>
+            <li><strong>Interpersonal:</strong> Communication, customer service, adaptability</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Interests</div>
+        <ul class="bullet-list">
+            <li>Reading books and newspapers</li>
+            <li>Community activities</li>
+            <li>Sports and physical fitness</li>
+            <li>Learning new skills</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">References</div>
+        <p style="margin-bottom: 4pt; font-size: 11pt;"><strong>{{ applicant.manager_name|default:"Available upon request" }}</strong></p>
+        {% if applicant.work_phone_number %}
+        <p style="margin-top: 0; font-size: 11pt;">{{ applicant.work_phone_number }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
